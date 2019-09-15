@@ -1,67 +1,51 @@
 #!/usr/bin/python3
-"""This module contains the FileStorage class
-which serializes/deserializes dictionaries/JSON files
-"""
-
-from models.amenity import Amenity
-from models.base_model import BaseModel
-from models.city import City
-from models.place import Place
-from models.review import Review
-from models.state import State
-from models.user import User
+''' This module contains one class, FileStorage '''
 import json
-import os
+from models.base_model import BaseModel
 
+class FileStorage:
+    ''' This class handles JSON [de]serialization '''
+    __file_path = 'file.json'
+    __objects = {}
+    __allowed_classes = {'BaseModel': BaseModel}
 
-class FileStorage():
-    """convert between dictionary string representations of
-    objects and JSON files
-    Attributes
-        file_path: json file to store json formatted objs in
-        objects: Dict of objs by [class].[id]
-    """
-    __file_path = str(os.getcwd()) + "/file.json"      # path to the JSON file
-    __objects = {}        # stores objects by [class].[id]
+    @staticmethod
+    def allowed_classes():
+        ''' returns private attr of instantiable classes '''
+        return FileStorage.__allowed_classes
 
-    def __init__(self):
-        """Initializes file storage class"""
-        self.__class__.__objects = {}
+    def file_path(self):
+        ''' The path of the json file that's being reloaded '''
+        return self.__file_path
 
     def all(self):
-        """Returns list of all objects in storage"""
-        return FileStorage.__objects
+        ''' returns objects dict, much like getter '''
+        return self.__objects
 
     def new(self, obj):
-        """Sets a new object's key and value in __objects"""
-        tmp_dict = obj.to_dict()
-        obj_key = tmp_dict['__class__'] + '.' + str(tmp_dict['id'])
-        self.__objects[obj_key] = obj
+        ''' add new object to dict of all objects '''
+        self.all()["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
 
     def save(self):
-        """Saves objects to file"""
-        with open(FileStorage.__file_path, mode="w") as fp:
-            json.dump({k:v.to_dict() for k, v in FileStorage.__objects.items()}, fp)
+        ''' serialize dict of all objects '''
+        list_of_dicts = [obj.to_dict() for (key, obj) in
+                         self.all().items()]
+        with open(FileStorage.__file_path, "w+", encoding="utf-8") as f:
+            f.write(json.dumps(list_of_dicts))
 
     def reload(self):
-        """Reloads file from disk"""
+        ''' instantiate objects from a json file '''
         try:
-            with open(FileStorage.__file_path) as fp:
-                data = json.load(fp)
+            with open(FileStorage.__file_path, "r") as f:
+                list_of_dicts = FileStorage.from_json_string(f.read())
         except FileNotFoundError:
-            return
-        tmp = {}
-        for k, v in data.items():
-            tmp[k] = eval(k.split(".")[0] + '(**v)')
-            FileStorage.__objects = tmp
+            list_of_dicts = []
+        [FileStorage.allowed_classes()[each_dict['__class__']](**each_dict)
+         for each_dict in list_of_dicts if each_dict['__class__'] in
+         FileStorage.allowed_classes()]
 
-    @property
-    def objects(self):
-        """objects getter"""
-        return self.__class__.__objects
-
-    @objects.setter
-    def objects(self):
-        """objects getter"""
-        tmp = {}
-        self.__class__.__objects = tmp
+    def from_json_string(json_string):
+        '''convert json string into list of dictionaries representing
+           an object's attributes
+        '''
+        return [] if json_string is None or json_string == "" else json.loads(json_string)

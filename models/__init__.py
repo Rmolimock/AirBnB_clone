@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""Init file sets up FileStorage object and reloads
-files from disk
-"""
+''' determine which filestorage method to use based on env variable '''
 
 from models.engine.file_storage import FileStorage 
 
