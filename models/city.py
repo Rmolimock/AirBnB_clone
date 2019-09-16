@@ -1,23 +1,13 @@
 #!/usr/bin/python3
-"""This module contains the City` class for
-which inherits from BaseModel
-"""
+''' This module contains one class, City '''
 from models.base_model import BaseModel
 
 
 class City(BaseModel):
-    """City class for Holberton BnB project
-    Args:
-        BaseModel: Inherits from BaseModel class
-    """
-
+    ''' This class defines the City object '''
     state_id = ""
     name = ""
 
     def __init__(self, *args, **kwargs):
-        """Initializes the City obj
-        Args:
-            args: args
-            kwargs: Dictionary of object attributes
-        """
+        ''' Initialize a city with BaseModel's atts/methods '''
         super().__init__(self, *args, **kwargs)

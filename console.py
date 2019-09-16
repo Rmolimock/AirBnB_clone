@@ -4,6 +4,11 @@ import cmd
 import models
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 import shlex
 
 
@@ -12,7 +17,9 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
 
-    __g_classes = {'BaseModel': BaseModel, 'User': User}
+    __g_classes = {'BaseModel': BaseModel, 'User': User, 'State': State,
+                   'City': City, 'Amenity': Amenity, 'Place': Place,
+                   'Review': Review}
 
     def do_EOF(self, arg):
         ''' exit the console '''
@@ -115,10 +122,10 @@ class HBNBCommand(cmd.Cmd):
                 return False
             for k, v in models.storage.all().items():
                 if name in k:
-                    objects.append(v)
+                    objects.append(str(v))
             if len(objects) < 1:
                 return False
-            return objects
+            print(objects)
 
     def do_update(self, line):
         ''' update an instance with new attr values '''

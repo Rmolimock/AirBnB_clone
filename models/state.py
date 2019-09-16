@@ -1,22 +1,12 @@
 #!/usr/bin/python3
-"""This module contains the State` class for
-which inherits from BaseModel
-"""
+''' This module contains one class, State '''
 from models.base_model import BaseModel
 
 
 class State(BaseModel):
-    """State class for Holberton BnB project
-    Args:
-        BaseModel: Inherits from BaseModel class
-    """
-
+    ''' This class defines state objects '''
     name = ""
 
     def __init__(self, *args, **kwargs):
-        """Initializes the State obj
-        Args:
-            args: args
-            kwargs: Dictionary of object attributes
-        """
+        ''' Initialize a state with BaseModel's atts/methods '''
         super().__init__(self, *args, **kwargs)
