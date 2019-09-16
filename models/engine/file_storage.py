@@ -2,6 +2,8 @@
 ''' This module contains one class, FileStorage '''
 import json
 from models.base_model import BaseModel
+from models.user import User
+
 
 class FileStorage:
     ''' This class handles JSON [de]serialization '''
