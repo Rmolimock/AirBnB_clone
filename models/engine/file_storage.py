@@ -7,7 +7,7 @@ class FileStorage:
     ''' This class handles JSON [de]serialization '''
     __file_path = 'file.json'
     __objects = {}
-    __allowed_classes = {'BaseModel': BaseModel}
+    __allowed_classes = {'BaseModel': BaseModel, 'User': User}
 
     @staticmethod
     def allowed_classes():

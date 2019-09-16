@@ -11,7 +11,7 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb) "
 
-    __g_classes = {'BaseModel': BaseModel}
+    __g_classes = {'BaseModel': BaseModel, 'User': User}
 
     def do_EOF(self, arg):
         ''' exit the console '''
